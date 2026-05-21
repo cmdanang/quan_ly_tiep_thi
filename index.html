@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Co.opmart Đà Nẵng - V52.5.4 Platinum</title>
+    <title>Co.opmart Đà Nẵng - V52.5.6 Platinum</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -82,7 +82,7 @@
         <div class="card" style="overflow-x:auto; padding:0;">
             <table>
                 <thead>
-                    <tr><th>Họ & Tên</th><th>Bộ phận / Nhà CC</th><th>Vào ca</th><th>Nghỉ</th><th> Vào Lại</th><th>Về</th><th>Tổng giờ</th></tr>
+                    <tr><th>Họ & Tên</th><th>Bộ phận / Nhà CC</th><th>Vào ca</th><th>Nghỉ</th><th>Lại</th><th>Về</th><th>Tổng giờ</th></tr>
                 </thead>
                 <tbody id="table-body"></tbody>
             </table>
@@ -94,11 +94,14 @@
     const API = "https://script.google.com/macros/s/AKfycbxHqGmt5_kFFOxedSl9wsrIlBb3OJmaAZX9FBvzgXBxFacnw5tkCw5zv_lM80Ue2szxUw/exec";
     let rawData = [], isLock = false, html5QrCode, currentFilter = 'ALL';
 
+    // TÍNH NĂNG ĐỌC TÊN BẰNG TIẾNG ANH (HELLO)
     function speakWelcome(name) {
         if ('speechSynthesis' in window) {
             const synth = window.speechSynthesis;
-            const utterThis = new SpeechSynthesisUtterance("Xin chào " + name);
-            utterThis.lang = 'vi-VN'; utterThis.rate = 0.9;
+            synth.cancel(); // Xóa lệnh cũ, đọc ngay lệnh mới
+            const utterThis = new SpeechSynthesisUtterance("HELLO! HAVE A GOOD DAY! " );
+            utterThis.lang = 'en-US'; // Chuyển sang giọng đọc tiếng Anh Mỹ
+            utterThis.rate = 1.0;     // Tốc độ chuẩn tự nhiên
             synth.speak(utterThis);
         }
     }
@@ -128,7 +131,7 @@
             const result = await res.json();
             document.getElementById('loading-overlay').style.display = 'none';
             if(result.status === "SUCCESS") {
-                speakWelcome(result.profile.name);
+                speakWelcome(result.profile.name); // THỰC HIỆN ĐỌC HELLO + TÊN
                 showProfile(result.profile, result.msg);
                 loadData();
             }
